@@ -4,22 +4,26 @@ import { Row } from "react-bootstrap";
 
 import ScoopOption from "./ScoopOption";
 import ToppingOption from "./ToppingOption";
+import AlertBanner from '../common/AlertBanner';
 
 const Options = ({ optionType }) => {
   const [items, setItems] = useState([]);
+  const [error, setError] = useState(false)
 
   useEffect(() => {
-    // optionType is 'scoops' or 'toppings'
     axios
       .get(`http://localhost:3030/${optionType}`)
       .then((res) => setItems(res.data))
       .catch((err) => {
         // TODO: handle error response
-        console.log(err);
+        setError(true)
       });
   }, [optionType]);
 
-  // TODO: replace 'null' with ToppingOption when avialable
+  if(error) {
+    return <AlertBanner />
+  }
+
   const ItemComponent = optionType === "scoops" ? ScoopOption : ToppingOption;
 
   const optionItems = items.map((item) => (
