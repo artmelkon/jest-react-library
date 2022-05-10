@@ -7,6 +7,7 @@ import { OrderDetailsProvider } from "../../../../context/OrderDetails";
 describe("Total Update", () => {
   describe("Scoops Subtotal", () => {
     it("should rturn updated scoop subtotal when scoops change", async () => {
+      // wrapper - applied dynamically - check documentation https://testing-library.com/docs/react-testing-library/setup
       render(<Options optionType="scoops" />);
 
       // make sure total start out $0.00
@@ -26,6 +27,7 @@ describe("Total Update", () => {
       expect(scoopsSubtotal).toHaveTextContent("2.00");
 
       // update chocolate scoops to 2 and check the subtotal
+      // spinbutton - For documentation visit https://accessibilityresources.org/spinbutton
       const chocolateInput = await screen.findByRole("spinbutton", {
         name: "Chocolate",
       });
