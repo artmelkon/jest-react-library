@@ -1,26 +1,17 @@
-import logo from "./logo.svg";
+import { Container } from "react-bootstrap";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+import OrderEntry from './pages/entry/OrderEntry';
+import {OrderDetailsProvider} from './context/OrderDetails';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <OrderDetailsProvider>
+        {/* Summary pate and entry page need provider */}
+        <OrderEntry />
+      </OrderDetailsProvider>
+      {/*  confirmation page does not need provider */}
+    </Container>
   );
 }
 

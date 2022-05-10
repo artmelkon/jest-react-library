@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "../../../../test-utils/testing-library-utils";
 
 import Options from "../../../../pages/entry/Options";
+import {OrderDetailsProvider} from '../../../../context/OrderDetails';
 
 describe("GET /scoope", () => {
   it("should display image for each scoop option from server", async () => {
