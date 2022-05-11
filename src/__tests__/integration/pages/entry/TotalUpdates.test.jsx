@@ -2,7 +2,7 @@ import { render, screen } from "../../../../test-utils/testing-library-utils";
 import userEvent from "@testing-library/user-event";
 
 import Options from "../../../../pages/entry/options";
-import { OrderDetailsProvider } from "../../../../context/OrderDetails";
+// import { OrderDetailsProvider } from "../../../../context/OrderDetails";
 
 describe("Total Update", () => {
   describe("Scoops Subtotal", () => {
@@ -41,7 +41,7 @@ describe("Total Update", () => {
 
       // make sure total start out $0.00
       const scoopSubtotal = screen.getByText("Scoops total: $", {
-        exact: false
+        exact: false,
       });
 
       const chocolateInput = await screen.findByRole("spinbutton", {
@@ -51,6 +51,43 @@ describe("Total Update", () => {
       userEvent.type(chocolateInput, "2");
 
       expect(scoopSubtotal).toHaveTextContent("4.00");
+    });
+  });
+
+  describe("Toppings Subtotal", () => {
+    it('should render Subtotal "0.00"', async () => {
+      // wrapper applied dynamically
+      render(<Options optionType="toppings" />);
+
+      const toppingSubtotal = screen.getByText("Toppings total: $", {
+        exact: false,
+      });
+
+      expect(toppingSubtotal).toHaveTextContent("0.00");
+    });
+    it("should return a checked topping", async () => {
+      render(<Options optionType="toppings" />);
+
+      const toppingSubtotal = screen.getByText("Toppings total: $", {
+        exact: false,
+      });
+      const cherriesTopping = await screen.findByRole("checkbox", {
+        name: "Cherries",
+      });
+      userEvent.click(cherriesTopping);
+      expect(cherriesTopping).toBeChecked();
+      expect(toppingSubtotal).toHaveTextContent("1.50");
+
+      const hotFudgeTopping = await screen.findByRole('checkbox', {
+        name: "Hot fudge"
+      });
+      userEvent.click(hotFudgeTopping)
+      expect(hotFudgeTopping).toBeChecked();
+      expect(toppingSubtotal).toHaveTextContent('3.00');
+
+      userEvent.click(hotFudgeTopping);
+      expect(hotFudgeTopping).not.toBeChecked();
+      expect(toppingSubtotal).toHaveTextContent('1.50');
     });
   });
 });

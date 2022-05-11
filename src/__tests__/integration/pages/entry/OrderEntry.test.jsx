@@ -1,4 +1,8 @@
-import { render, screen, waitFor } from "../../../../test-utils/testing-library-utils";
+import {
+  render,
+  screen,
+  waitFor,
+} from "../../../../test-utils/testing-library-utils";
 import { rest } from "msw";
 
 import { server } from "../../../../mocks/server";
