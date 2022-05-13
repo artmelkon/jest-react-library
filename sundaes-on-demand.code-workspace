@@ -5,6 +5,9 @@
     },
     {
       "path": "../sundae-server"
+    },
+    {
+      "path": "../code-quiz/sundaes-on-demand/05-final-exam"
     }
   ],
   "settings": {

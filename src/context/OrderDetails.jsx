@@ -1,15 +1,7 @@
 import { createContext, useContext, useState, useMemo, useEffect } from "react";
 
 import { pricePerItem } from "../constants";
-
-// Format number as currrency;
-const formatCurrency = (amount) => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-  }).format(amount);
-};
+import { formatCurrency } from "../utilities";
 
 // expecting value of undefined
 const OrderDetails = createContext();
@@ -71,7 +63,14 @@ export function OrderDetailsProvider(props) {
       setOptionCounts(newOptionCounts);
     }
 
-    return [{ ...optionCounts, totals }, updateItemCount];
+    function resetOrder() {
+      setOptionCounts({
+        scoops: new Map(),
+        topping: new Map(),
+      });
+    }
+
+    return [{ ...optionCounts, totals }, updateItemCount, resetOrder];
   }, [optionCounts, totals]);
 
   return <OrderDetails.Provider value={value} {...props} />;
