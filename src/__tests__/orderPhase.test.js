@@ -8,83 +8,92 @@ describe("Order Phases for Happy Path", () => {
     it("add ice cream scoops and toppings", async () => {
       render(<App />);
 
-      const grandTotal = await screen.findByRole("heading", {
-        name: /grand total: \$/i,
-      });
+      /*
+      add ice cream scoops and toppings to your selection
+      =================================================== */
       const vanillaInput = await screen.findByRole("spinbutton", {
         name: "Vanilla",
       });
+      userEvent.clear(vanillaInput);
+      userEvent.type(vanillaInput, "1");
       const chocolateInput = screen.getByRole("spinbutton", {
         name: "Chocolate",
       });
+      userEvent.clear(chocolateInput);
+      userEvent.type(chocolateInput, "2");
       const cherriesTopping = await screen.findByRole("checkbox", {
         name: "Cherries",
       });
-
-      userEvent.clear(vanillaInput);
-      userEvent.type(vanillaInput, "1");
-      userEvent.clear(chocolateInput);
-      userEvent.type(chocolateInput, "2");
       userEvent.click(cherriesTopping);
       expect(cherriesTopping).toBeChecked();
-      expect(grandTotal).toHaveTextContent("7.50");
 
-      // "find and click order button"
-      const placeOrder = screen.getByRole("button", {
+      const submitOrder = screen.getByRole("button", {
         name: /order sundae/i,
       });
-      userEvent.click(placeOrder);
+      userEvent.click(submitOrder);
+      /* END OF
+       * add ice cream scoops and toppings to your selection
+       */
 
-      //"check summary infromation based on order"
-      const summaryPage = await screen.findByRole("heading", {
+      /**
+       * Check summary infromation based on order selections
+      ======================================================*/
+      const summaryHeading = screen.getByRole("heading", {
         name: "Order Summary",
       });
-      expect(summaryPage).toBeInTheDocument();
-
-      const scoopsSummary = screen.getByRole("heading", {
+      expect(summaryHeading).toBeInTheDocument();
+      const scoopsHeading = screen.getByRole("heading", {
         name: "Scoops: $6.00",
       });
-      expect(scoopsSummary).toBeInTheDocument();
-      const toppingsSummary = screen.getByRole("heading", {
+      expect(scoopsHeading).toBeInTheDocument();
+      const toppingsHeading = screen.getByRole("heading", {
         name: "Toppings: $1.50",
       });
-      expect(toppingsSummary).toBeInTheDocument();
+      expect(toppingsHeading).toBeInTheDocument();
 
+      // check summary option items
       expect(screen.getByText("1 Vanilla")).toBeInTheDocument();
       expect(screen.getByText("2 Chocolate")).toBeInTheDocument();
       expect(screen.getByText("Cherries")).toBeInTheDocument();
 
-      // click the button to confirm the order
-      const orderTerms = screen.getByRole("checkbox", {
-        name: /terms and conditions/i,
+      const tcCheckbox = screen.getByRole("checkbox", {
+        name: /agree to/i,
       });
-      userEvent.click(orderTerms);
-      expect(orderTerms).toBeChecked();
+      userEvent.click(tcCheckbox);
+      expect(tcCheckbox).toBeChecked();
 
-      const confirmOrder = screen.getByRole("button", {
+      const confirmOrderButton = screen.getByRole("button", {
         name: /confirm order/i,
       });
-      userEvent.click(confirmOrder);
+      userEvent.click(confirmOrderButton);
+      /** END OF
+       * Check summary infromation based on order selections
+      */
 
-      // // confirm order number on confirmation page
-      // const thanYourHeading = await screen.findByRole("heading", {
-      //   name: /thank you/i,
-      // });
-      // expect(thanYourHeading).toBeInTheDocument();
+      /**
+       * Confirm order number on confirmation page
+       * this pages uses async because there is a POST request
+       * then we need to click button to reset the order form
+       */
+      const confirmNumber = await screen.findByText(/order number/i);
+      expect(confirmNumber).toBeInTheDocument();
 
-      // const orderNumber = screen.getByText(/your order number/i);
-      // expect(orderNumber).toBeInTheDocument();
-      // // click new order on confirmation page
-      // const newOrderBtn = screen.getByRole("button", {
-      //   name: /new order/i,
-      // });
-      // userEvent.click(newOrderBtn);
-      // // check that scoops and topping are reset
-      // expect(grandTotal).toHaveTextContent("0.00");
+      const newOrderBtn = screen.getByRole('button', {
+        name: /new order/i
+      });
+      userEvent.click(newOrderBtn);
+      /** END of Conrimation page test */
 
-      // // do w need to avoid test errors?
-      // await screen.findByRole("spinner", { name: "Vanilla" });
-      // await screen.findByRole("checkbox", { name: "Cherries" });
+      /**
+       * Check the scoops and toppings have been rest
+       */
+      const scoopsTotal = screen.getByText('Scoops total: $0.00');
+      expect(scoopsTotal).toBeInTheDocument();
+      const toppingsTatal = screen.getByText('Toppings total: $0.00');
+
+      // do we need to avoid test errors?
+      await screen.findByRole("spinbutton", { name: "Vanilla" });
+      await screen.findByRole("checkbox", { name: "Cherries" });
     });
   });
 });

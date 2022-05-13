@@ -7,8 +7,7 @@ import OrderConfrimation from './pages/confirmation/OrderConfirmation';
 
 import { OrderDetailsProvider } from "./context/OrderDetails";
 
-/* The following line can be included in your src/index.js or App.js file*/
-import "bootstrap/dist/css/bootstrap.min.css";
+
 
 function App() {
   const [orderPhase, setOrderPhase] = useState("inProgress");
