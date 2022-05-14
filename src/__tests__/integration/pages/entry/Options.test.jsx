@@ -1,7 +1,8 @@
 import { render, screen } from "../../../../test-utils/testing-library-utils";
 
 import Options from "../../../../pages/entry/Options";
-import {OrderDetailsProvider} from '../../../../context/OrderDetails';
+import userEvent from "@testing-library/user-event";
+// import {OrderDetailsProvider} from '../../../../context/OrderDetails';
 
 describe("GET /scoope", () => {
   it("should display image for each scoop option from server", async () => {
@@ -35,5 +36,25 @@ describe("GET /toppings", () => {
       "Hot fudge topping",
     ]);
     expect(altText).toEqual(expect.arrayContaining(["Cherries topping"]));
+  });
+  it("no scoops subtotal should render on invalid input", async () => {
+    render(<Options optionType="scoops" />);
+
+    const vanillaInput = await screen.findByRole("spinbutton", {
+      name: "Vanilla",
+    });
+    const scoopsTotal = screen.getByText(/scoops total: \$/i);
+
+    userEvent.clear(vanillaInput);
+    userEvent.type(vanillaInput, "-1");
+    expect(scoopsTotal).toHaveTextContent("0.00");
+
+    userEvent.clear(vanillaInput);
+    userEvent.type(vanillaInput, "2.5");
+    expect(scoopsTotal).toHaveTextContent("0.00");
+
+    userEvent.clear(vanillaInput);
+    userEvent.type(vanillaInput, "2");
+    expect(scoopsTotal).toHaveTextContent("4.00");
   });
 });

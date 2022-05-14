@@ -1,16 +1,19 @@
-import {useState} from 'react';
+import { useState } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 
 const ScoopOption = ({ name, imagePath, updateItemCount }) => {
-  const [isValid, setIsValid] = useState(true)
+  const [isValid, setIsValid] = useState(true);
   const handleChange = (e) => {
     const { value } = e.target;
-    updateItemCount(name, value);
-
     const currentValue = parseFloat(value);
-    setIsValid(
-      0 <= currentValue && currentValue <= 10 && Math.floor(currentValue) === currentValue
-    )
+
+    const isInteger =
+      0 <= currentValue &&
+      currentValue <= 10 &&
+      Math.floor(currentValue) === currentValue;
+    isInteger ? updateItemCount(name, value) : updateItemCount(name, 0);
+
+    setIsValid(isInteger);
   };
 
   return (

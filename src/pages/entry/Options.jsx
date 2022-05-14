@@ -28,6 +28,8 @@ const Options = ({ optionType }) => {
     return <AlertBanner />;
   }
 
+  // console.log('scoop count ', orderDetails.totals.scoops)
+
   const ItemComponent = optionType === "scoops" ? ScoopOption : ToppingOption;
   const title = optionType[0].toUpperCase() + optionType.slice(1).toLowerCase();
 
