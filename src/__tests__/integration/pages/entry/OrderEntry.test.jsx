@@ -7,6 +7,7 @@ import { rest } from "msw";
 
 import { server } from "../../../../mocks/server";
 import OrderEntry from "../../../../pages/entry/OrderEntry";
+import userEvent from "@testing-library/user-event";
 
 describe("ERROR - routes", () => {
   const url = "http://localhost:3030";
@@ -27,5 +28,26 @@ describe("ERROR - routes", () => {
       const alert = await screen.findAllByRole("alert");
       expect(alert).toHaveLength(2);
     });
+  });
+  it("should disable the order button if scoops count is 0", async () => {
+    render(<OrderEntry />);
+
+    const orderButton = screen.getByRole("button", {
+      name: /order sundae/i,
+    });
+    expect(orderButton).toBeDisabled();
+
+    const vanillaInput = await screen.findByRole("spinbutton", {
+      name: "Vanilla",
+    });
+    userEvent.clear(vanillaInput);
+    userEvent.type(vanillaInput, "1");
+
+    expect(orderButton).toBeEnabled();
+
+    userEvent.clear(vanillaInput);
+    userEvent.type(vanillaInput, "0");
+
+    expect(orderButton).toBeDisabled();
   });
 });

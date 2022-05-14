@@ -7,7 +7,7 @@ import ToppingOption from "./ToppingOption";
 import AlertBanner from "../common/AlertBanner";
 import { pricePerItem } from "../../constants";
 import { useOrderDetails } from "../../context/OrderDetails";
-import {formatCurrency} from '../../utilities';
+import { formatCurrency } from "../../utilities";
 
 const Options = ({ optionType }) => {
   const [items, setItems] = useState([]);
@@ -17,7 +17,7 @@ const Options = ({ optionType }) => {
   useEffect(() => {
     axios
       .get(`http://localhost:3030/${optionType}`)
-      .then((res) => setItems(res.data))
+      .then((response) => setItems(response.data))
       .catch((err) => {
         // TODO: handle error response
         setError(true);

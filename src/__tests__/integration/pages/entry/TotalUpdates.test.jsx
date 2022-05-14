@@ -7,7 +7,7 @@ import OrderEntry from "../../../../pages/entry/OrderEntry";
 
 describe("Total Update", () => {
   describe("Scoops Subtotal", () => {
-    it.skip("should rturn updated scoop subtotal when scoops change", async () => {
+    it("should rturn updated scoop subtotal when scoops change", async () => {
       // wrapper - applied dynamically - check documentation https://testing-library.com/docs/react-testing-library/setup
       render(<Options optionType="scoops" />);
 
@@ -24,7 +24,7 @@ describe("Total Update", () => {
       });
       userEvent.clear(vanillaInput);
       userEvent.type(vanillaInput, "1");
-      expect(scoopsSubtotal).toHaveTextContent("2.00");
+      await expect(scoopsSubtotal).toHaveTextContent("2.00");
 
       // update chocolate scoops to 2 and check the subtotal
       // spinbutton - For documentation visit https://accessibilityresources.org/spinbutton
@@ -35,7 +35,7 @@ describe("Total Update", () => {
       userEvent.type(chocolateInput, "2");
       expect(scoopsSubtotal).toHaveTextContent("6.00");
     });
-    it.skip("should return chocolate scoop subtotal when scoops change", async () => {
+    it("should return chocolate scoop subtotal when scoops change", async () => {
       render(<Options optionType="scoops" />);
 
       // make sure total start out $0.00
@@ -54,20 +54,10 @@ describe("Total Update", () => {
   });
 
   describe("Toppings Subtotal", () => {
-    it.skip('should render Subtotal "0.00"', async () => {
-      // wrapper applied dynamically
+    it("should return a checked topping", async () => {
       render(<Options optionType="toppings" />);
 
-      const toppingSubtotal = screen.getByText("Toppings total: $", {
-        exact: false,
-      });
-
-      expect(toppingSubtotal).toHaveTextContent("0.00");
-    });
-    it.skip("should return a checked topping", async () => {
-      render(<Options optionType="toppings" />);
-
-      const toppingSubtotal = screen.getByText("Toppings total: $", {
+      const toppingSubtotal = await screen.findByText("Toppings total: $", {
         exact: false,
       });
       const cherriesTopping = await screen.findByRole("checkbox", {
@@ -165,7 +155,7 @@ describe("Grand Total", () => {
     expect(grandTotal).toHaveTextContent("3.50");
 
     userEvent.click(cherriesTopping);
-    expect(cherriesTopping).not.toBeChecked();
-    expect(grandTotal).toHaveTextContent("2.00");
+    await expect(cherriesTopping).not.toBeChecked();
+    await expect(grandTotal).toHaveTextContent("2.00");
   });
 });

@@ -30,7 +30,7 @@ const OrderConfirmation = ({ setOrderPhase }) => {
   if (orderNumber) {
     return (
       <div style={{ textAlign: "center" }}>
-        <h1>Thank Your!</h1>
+        <h1>Thank You!</h1>
         <p>Your order number is {orderNumber}</p>
         <p style={{ fontSize: "25%" }}>
           as per our terms and conditions, nothing will happen now
